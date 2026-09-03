@@ -8,6 +8,7 @@ const TRANSCODER_PATH =
 const TRANSCODER_NAME = process.env.TRANSCODER_NAME || "Plex Transcoder";
 const EAE_SUPPORT = process.env.EAE_SUPPORT || "1";
 const EAE_EXECUTABLE = process.env.EAE_EXECUTABLE || "";
+const EAE_PID_FILE = "/run/clusterplex/easy-audio-encoder.pid";
 // hwaccel decoder: https://trac.ffmpeg.org/wiki/HWAccelIntro
 const FFMPEG_HWACCEL = process.env.FFMPEG_HWACCEL || false;
 
@@ -127,7 +128,7 @@ socket.on("worker.task.request", (taskRequest) => {
 				});
 			}
 
-			if (fs.existsSync(`${EAE_EXECUTABLE}.pid`)) {
+			if (fs.existsSync(EAE_PID_FILE)) {
 				console.log(`EAE Support - EAE already running`);
 			} else {
 				console.log(
@@ -264,13 +265,13 @@ ON_DEATH((signal, err) => {
 });
 
 function deleteEAE_PID() {
-	if (fs.existsSync(`${EAE_EXECUTABLE}.pid`)) {
+	if (fs.existsSync(EAE_PID_FILE)) {
 		console.log("Removing EAE PID file");
-		fs.unlinkSync(`${EAE_EXECUTABLE}.pid`);
+		fs.unlinkSync(EAE_PID_FILE);
 	}
 }
 
 function createEAE_PID(pid) {
 	console.log("EAE Support - Writing PID file");
-	fs.writeFileSync(`${EAE_EXECUTABLE}.pid`, pid);
+	fs.writeFileSync(EAE_PID_FILE, pid);
 }

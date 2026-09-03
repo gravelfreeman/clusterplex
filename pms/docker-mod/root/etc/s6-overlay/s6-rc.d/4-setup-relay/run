@@ -8,10 +8,8 @@ sed -i 's/_PMS_PORT/'"${PMS_PORT:-32400}"'/g' /etc/haproxy/haproxy.cfg
 sed -i 's/_LOCAL_RELAY_PORT/'"${LOCAL_RELAY_PORT:-32499}"'/g' /etc/haproxy/haproxy.cfg
 
 if [[ ! -s /proc/net/if_inet6 ]]; then
-    echo "**** IPv6 is unavailable, disabling the IPv6 relay bind ****"
     sed -i '/^[[:space:]]*bind \[::\]:/d' /etc/haproxy/haproxy.cfg
 fi
 
-echo "**** validating HAProxy configuration ****"
-/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg
+/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg || exit 1
 echo "**** HAProxy configuration complete ****"

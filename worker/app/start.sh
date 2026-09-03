@@ -192,12 +192,11 @@ done
 export FFMPEG_EXTERNAL_LIBS="${CODEC_PATH}/"
 export PLEX_MEDIA_SERVER_INFO_MODEL="${INTERNAL_PLEX_MEDIA_SERVER_INFO_MODEL}"
 export EAE_EXECUTABLE="${CODEC_PATH}/EasyAudioEncoder/EasyAudioEncoder/EasyAudioEncoder"
-
-pid_file="${EAE_EXECUTABLE}.pid"
+pid_file="/run/clusterplex/easy-audio-encoder.pid"
 
 if [ -f "$pid_file" ]; then
   echo "Removing EAE pid file"
-  rm "$pid_file"
+  rm -f "$pid_file"
 fi
 
 cd /app

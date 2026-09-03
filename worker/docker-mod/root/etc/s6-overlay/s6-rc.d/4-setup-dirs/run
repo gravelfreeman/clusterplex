@@ -1,0 +1,27 @@
+#!/usr/bin/with-contenv bash
+
+WORKER_DIRECTORIES=(
+    /codecs
+    /run/clusterplex
+)
+
+setup_directories() {
+    local directory
+
+    for directory in "${WORKER_DIRECTORIES[@]}"
+    do
+        echo "**** Setting up directory ${directory} ****"
+        if [ -d "${directory}" ]
+        then
+            echo "Directory already present"
+        else
+            echo "Creating ${directory}"
+            mkdir -p "${directory}"
+        fi
+    done
+}
+
+setup_directories
+
+echo "**** Changing ownership for worker directories ****"
+chown abc:abc "${WORKER_DIRECTORIES[@]}"
